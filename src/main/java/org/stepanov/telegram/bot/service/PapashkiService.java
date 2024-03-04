@@ -39,26 +39,22 @@ public class PapashkiService {
             String text = updateMessage.message().text();
 
             if (text.startsWith("/set_ep_bel")) {
-                String[] data = text.split("-");
-                if (data.length < 3) {
-                    message = "Please add details. Example: /set_ep_bel - 7 Feb 2014 - 234";
+                Object[] data = parseMessage(text);
+                if (data == null) {
+                    message = "Please add details. <command> <amount> <date YYYY-MM-DD>\nExample: /set_ep_bel 234 2014-02-04";
                 } else {
-                    Integer amount = Integer.valueOf(data[2].trim());
-                    LocalDate date = LocalDate.parse(data[1].trim(),
-                            DateTimeFormatter.ofPattern("d MMM yyyy"));
-
+                    LocalDate date = (LocalDate) data[1];
+                    Integer amount = (Integer) data[0];
                     epService.setBel(date, amount);
                     message = String.format("I added data for Bel [%1$te %1$tb %1$tY - %2$d]", date, amount);
                 }
             } else if (text.startsWith("/set_ep_global")) {
-                String[] data = text.split("-");
-                if (data.length < 3) {
-                    message = "Please add details. Example: /set_ep_global - 7 Feb 2014 - 234";
+                Object[] data = parseMessage(text);
+                if (data == null) {
+                    message = "Please add details. <command> <amount> <date YYYY-MM-DD>\nExample: /set_ep_global 234 2014-02-04";
                 } else {
-                    Integer amount = Integer.valueOf(data[2].trim());
-                    LocalDate date = LocalDate.parse(data[1].trim(),
-                            DateTimeFormatter.ofPattern("d MMM yyyy"));
-
+                    LocalDate date = (LocalDate) data[1];
+                    Integer amount = (Integer) data[0];
                     epService.setGlobal(date, amount);
                     message = String.format("I added data for Global [%1$te %1$tb %1$tY - %2$d]", date, amount);
                 }
@@ -74,6 +70,21 @@ public class PapashkiService {
         SendMessage replyMessage = getReplyMessage(updateMessage, message, "HTML");
 
         return messageService.sendMessage(replyMessage, papashkiConfig.token());
+    }
+
+    private Object[] parseMessage(String text) {
+        String[] data = text.split(" ");
+        if (data.length < 2 || data.length > 3) {
+            return null;
+        }
+        Integer amount = Integer.valueOf(data[1].trim());
+        LocalDate date;
+        if (data.length == 2) {
+            date = LocalDate.now();
+        } else {
+            date = LocalDate.parse(data[2].trim());
+        }
+        return new Object[]{amount, date};
     }
 
     private static String createMessage(Map<LocalDate, Integer> map) {
