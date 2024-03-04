@@ -41,7 +41,7 @@ public class PapashkiService {
             if (text.startsWith("/set_ep_bel")) {
                 Object[] data = parseMessage(text);
                 if (data == null) {
-                    message = "Please add details. <command> <amount> <date YYYY-MM-DD>\nExample: /set_ep_bel 234 2014-02-04";
+                    message = "Please add details. \"command\" \"amount\" \"date YYYY-MM-DD\" Example: /set_ep_bel 234 2014-02-04";
                 } else {
                     LocalDate date = (LocalDate) data[1];
                     Integer amount = (Integer) data[0];
@@ -51,7 +51,7 @@ public class PapashkiService {
             } else if (text.startsWith("/set_ep_global")) {
                 Object[] data = parseMessage(text);
                 if (data == null) {
-                    message = "Please add details. <command> <amount> <date YYYY-MM-DD>\nExample: /set_ep_global 234 2014-02-04";
+                    message = "Please add details. \"command\" \"amount\" \"date YYYY-MM-DD\" Example: /set_ep_global 234 2014-02-04";
                 } else {
                     LocalDate date = (LocalDate) data[1];
                     Integer amount = (Integer) data[0];
