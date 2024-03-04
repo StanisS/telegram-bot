@@ -1,0 +1,40 @@
+package org.stepanov.telegram.bot.model;
+
+public record Chat(
+        Integer id,
+        String type,
+        String title,
+        String username,
+        String firstName,
+        String lastName,
+        Boolean isForum,
+//    photo,
+//    activeUsernames,
+//    availableReactions,
+//    accentColorId,
+//    backgroundCustomEmojiId,
+//    profileAccentColorId,
+//    profileBackgroundCustomEmojiId,
+//    emojiStatusCustomEmojiId,
+//    emojiStatusExpirationDate,
+//    bio,
+//    hasPrivateForwards,
+//    hasRestrictedVoiceAndVideoMessages,
+//    joinToSendMessages,
+//    joinByRequest,
+        String description,
+        String inviteLink
+//    pinnedMessage,
+//    permissions,
+//    slowModeDelay,
+//    messageAutoDeleteTime,
+//    hasAggressiveAntiSpamEnabled,
+//    hasHiddenMembers,
+//    hasProtectedContent,
+//    hasVisibleHistory,
+//    stickerSetName,
+//    canSetStickerSet,
+//    linkedChatId,
+//    location
+) {
+}

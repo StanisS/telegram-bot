@@ -1,0 +1,25 @@
+server:
+  port: 8443
+  servlet:
+    context-path: /
+
+spring:
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+    default-property-inclusion: non_null
+    deserialization:
+      fail-on-unknown-properties: false
+
+telegram:
+  host: "https://api.telegram.org"
+  url: ${telegram.host}/bot
+  admin:
+    userId:
+    chatId:
+    token:
+  papashki:
+    token:
+    trusted:
+
+data:
+  scv-path: "./data.csv"
