@@ -9,6 +9,10 @@ spring:
     default-property-inclusion: non_null
     deserialization:
       fail-on-unknown-properties: false
+  datasource:
+    url:
+    username:
+    password:
 
 telegram:
   host: "https://api.telegram.org"
@@ -19,7 +23,12 @@ telegram:
     token:
   papashki:
     token:
-    trusted:
+    header:
+    part:
+  family:
+    token:
+    header:
+    part:
 
-data:
-  scv-path: "./data.csv"
+automation:
+  host:

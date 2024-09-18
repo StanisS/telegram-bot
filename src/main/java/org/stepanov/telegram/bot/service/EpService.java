@@ -7,9 +7,9 @@ import org.stepanov.telegram.bot.repository.EpRepository;
 import org.stepanov.telegram.bot.repository.entity.EpEntity;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,53 +19,21 @@ public class EpService {
 
     private final EpRepository epRepository;
 
-    public void setBel(LocalDate date, Integer amount) {
-        epRepository.saveBel(date, amount);
+    public void setAmount(String country, Integer amount, LocalDate date, Integer userId) {
+        EpEntity entity = epRepository.findByScopeAndDate(country, date).orElse(new EpEntity(UUID.randomUUID()));
+        entity.setScope(country);
+        entity.setNumber(amount);
+        entity.setDate(date);
+        entity.setCreateBy(userId.toString());
+        epRepository.save(entity);
     }
 
-    public void setGlobal(LocalDate date, Integer amount) {
-        epRepository.saveGlobal(date, amount);
+    public Map<LocalDate, Integer> getAmount(String country) {
+        return epRepository.findByScopeOrderByDate(country).stream()
+                .collect(Collectors.toMap(EpEntity::getDate, EpEntity::getNumber, (v1, v2) -> v1, TreeMap::new));
     }
 
-    public Map<LocalDate, Integer> getBel() {
-        return epRepository.findBel().stream()
-                .collect(Collectors.toMap(EpEntity::date, EpEntity::number, (v1, v2) -> v1, TreeMap::new));
-    }
-
-    public Boolean deleteBelRecord(LocalDate date) {
-        epRepository.deleteBel(date);
-        return true;
-    }
-
-    public Boolean deleteGlobalRecord(LocalDate date) {
-        epRepository.deleteGlobal(date);
-        return true;
-    }
-
-//    public Map.Entry<LocalDate, Integer> getBel(LocalDate date) {
-//        return getEntry(date, bel);
-//    }
-
-    public Map<LocalDate, Integer> getGlobal() {
-        return epRepository.findGlobal().stream()
-                .collect(Collectors.toMap(EpEntity::date, EpEntity::number, (v1, v2) -> v1, TreeMap::new));
-    }
-
-//    public Map.Entry<LocalDate, Integer> getGlobal(LocalDate date) {
-//        return getEntry(date, global);
-//    }
-
-    private Map.Entry<LocalDate, Integer> getEntry(LocalDate date, TreeMap<LocalDate, Integer> collection) {
-        if (collection.containsKey(date)) {
-            return collection.ceilingEntry(date);
-        }
-
-        Map.Entry<LocalDate, Integer> ceilingEntry = collection.ceilingEntry(date);
-        Map.Entry<LocalDate, Integer> floorEntry = collection.floorEntry(date);
-
-        long betweenCeiling = ceilingEntry != null ? ChronoUnit.DAYS.between(date, ceilingEntry.getKey()) : Long.MAX_VALUE;
-        long betweenFloor = floorEntry != null ? ChronoUnit.DAYS.between(date, floorEntry.getKey()) : Long.MAX_VALUE;
-
-        return Math.abs(betweenFloor) <= Math.abs(betweenCeiling) ? floorEntry : ceilingEntry;
+    public void deleteRecord(String scope, LocalDate date) {
+        epRepository.deleteByScopeAndDate(scope, date);
     }
 }

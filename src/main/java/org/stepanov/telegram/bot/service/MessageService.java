@@ -9,6 +9,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.stepanov.telegram.bot.config.AdminConfig;
 import org.stepanov.telegram.bot.model.BaseResponse;
+import org.stepanov.telegram.bot.model.ReplyParameters;
 import org.stepanov.telegram.bot.model.SendMessage;
 import org.stepanov.telegram.bot.model.Update;
 
@@ -39,5 +40,17 @@ public class MessageService {
                 .text(warningMessage)
                 .build();
         sendMessage(notifyMessage, adminConfig.token());
+    }
+
+    public SendMessage getReplyMessage(Update updateMessage, String message, String parseMode) {
+        return SendMessage.builder()
+                .chatId(updateMessage.message().chat().id())
+                .replyParameters(ReplyParameters.builder()
+                        .messageId(updateMessage.message().messageId())
+                        .chatId(updateMessage.message().chat().id())
+                        .build())
+                .text(message)
+                .parseMode(parseMode)
+                .build();
     }
 }

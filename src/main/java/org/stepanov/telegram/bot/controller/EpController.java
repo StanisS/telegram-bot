@@ -25,15 +25,6 @@ public class EpController {
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void deleteEps(@PathVariable String scope, @PathVariable String date) {
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        switch (scope) {
-            case "bel" -> epService.deleteBelRecord(localDate);
-            case "global" -> epService.deleteGlobalRecord(localDate);
-        }
-    }
-
-    @DeleteMapping
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void deleteEps() {
-        log.info("Delete eps");
+        epService.deleteRecord(scope,localDate);
     }
 }

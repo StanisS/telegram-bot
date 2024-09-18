@@ -16,7 +16,6 @@ public class RestResponseEntityExceptionHandler
     @ExceptionHandler(value = {Exception.class, Error.class})
     @ResponseStatus(HttpStatus.OK)
     protected void handleConflict(RuntimeException ex, WebRequest request) {
-
         log.error("Path: " + request.getContextPath(), ex);
     }
 }

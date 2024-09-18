@@ -1,18 +1,18 @@
 package org.stepanov.telegram.bot.repository;
 
+import org.springframework.data.repository.CrudRepository;
 import org.stepanov.telegram.bot.repository.entity.EpEntity;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Collection;
+import java.util.Optional;
+import java.util.UUID;
 
-public interface EpRepository {
+public interface EpRepository extends CrudRepository<EpEntity, UUID> {
 
-    List<EpEntity> findBel();
-    List<EpEntity> findGlobal();
+    Collection<EpEntity> findByScopeOrderByDate(String scope);
 
-    EpEntity saveBel(LocalDate date, Integer number);
-    EpEntity saveGlobal(LocalDate date, Integer number);
+    Optional<EpEntity> findByScopeAndDate(String scope, LocalDate date);
 
-    void deleteBel(LocalDate date);
-    void deleteGlobal(LocalDate date);
+    void deleteByScopeAndDate(String scope, LocalDate date);
 }
